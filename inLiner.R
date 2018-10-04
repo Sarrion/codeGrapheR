@@ -120,11 +120,11 @@ string <- unlist(strsplit(string, "\n"))
 numOpPar <- ifelse(test = sapply(gregexpr("\\(", string), function(x) x[1]) < 0, yes = 0, no = sapply(gregexpr("\\(", string), length))
 numClPar <- ifelse(test = sapply(gregexpr("\\)", string), function(x) x[1]) < 0, yes = 0, no = sapply(gregexpr("\\)", string), length))
 totalPar <- numOpPar - numClPar
+
 cumPar = 0
 indxForRmv <- c()
 for(i in length(string):2){
   cumPar <- cumPar + totalPar[i]
-  print(cumPar)
   if(cumPar < 0){
     string[i - 1] <- paste0(string[i - 1], string[i])
     indxForRmv <- c(indxForRmv, i)
@@ -133,10 +133,9 @@ for(i in length(string):2){
 string <- string[-indxForRmv]
 
 # Cleaning non-useful lines: removing comments, void lines and {} symbols
-string <- gsub("\\{|\\}", "", string)
+# string <- gsub("\\{|\\}", "", string)
 string <- string[!(grepl(pattern = "#", string) | string == "")]
 
 # string <- gsub(pattern = "<-", replacement = ",", x = string)
 masterString <- string
-
-# nonsense comment
+rm(comPar, i, indxForRmv, numClPar, numOpPar, totalPar)
