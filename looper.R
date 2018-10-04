@@ -12,6 +12,6 @@ for(i in length(string):2){
   }
 }
 
-loopString <- grep("\\{", string, value = T)
 string <- string[-indxForRmv]
+loopString <- grep("\\{", string, value = T)
 string <- string[!grepl("\\{", string)]

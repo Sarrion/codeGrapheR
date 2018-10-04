@@ -1,42 +1,39 @@
-#########################
-####### FIRST STAGE #######
-#########################
-functionLines <- grepl(pattern = "\\(|\\)", string)
+library(stringr)
 
-string <- gsub(pattern = "\\(.*\\)", replacement = "\\(\\)", string)
+string %>%
+  grep("<-", ., value = T) -> arrowLines
 
-string <- gsub("\\[.*\\]", "", string)
+arrowLines %>% 
+  gsub("<-.*$", "", .) %>%
+  gsub(pattern = "\\(.*\\)", replacement = "\\(\\)", .) %>% 
+  gsub(pattern = "\\[.*\\]", replacement = "", .) -> leftSide
 
-
-# regmatches(string, gregexpr("^.*<-", string))
-#data.frame
+arrowLines %>% 
+  gsub("^.*<-", "", .) %>% 
+  sapply(function(x){ 
+    if( !grepl("\\(", x) && !grepl("\\[", x) )
+      return(x)
+    if(  grepl("\\(", x) && !grepl("\\[", x) )
+      return(gsub("\\(.*\\)$", "\\(\\)", x))
+    if( !grepl("\\(", x) &&  grepl("\\[", x) )
+      return(gsub("\\[.*\\]$", "", x))
+    if(  grepl("\\(", x) &&  grepl("\\[", x) ){
+      if(str_locate(x, "\\(")[,1] < str_locate(x, "\\[")[,1])
+        return(
+          gsub("\\(.*\\)", "\\(\\)", gsub("\\[.*\\]", "", x))
+        )
+      else
+        return(
+          gsub("\\[.*\\]$", "", x)
+        )
+    }
+  }
+  ) %>% 
+  as.character() -> rightSide
+  
 edges <- data.frame(
-  from = substr(string, lapply(gregexpr("<-", string), function(x) x[[1]] + 2 ), nchar(string)) ,  
-  to = substr(string, 1, lapply(gregexpr("<-", string), function(x) x[[1]] - 1 ))
-)
-masterEdges <- edges
-
-
-
-############################
-######## SECOND STAGE ########
-############################
-
-string <- masterString
-
-string <- grep(pattern = "\\(|\\)", string, value = T)
-
-string <- gsub(pattern = "^.*\\(", replacement = "", string)
-string <- gsub(pattern = "\\).*$", replacement = "", string)
-
-string <- gsub("\\[.*\\]", "", string)
-
-masterEdges <- rbind(
-  masterEdges, 
-  data.frame(
-    from = string,  
-    to = edges[1][functionLines, ]
+    from = rightSide,  
+    to = leftSide
   )
-)
 
 
