@@ -138,4 +138,4 @@ string <- string[!(grepl(pattern = "#", string) | string == "")]
 
 # string <- gsub(pattern = "<-", replacement = ",", x = string)
 masterString <- string
-rm(comPar, i, indxForRmv, numClPar, numOpPar, totalPar)
+rm(cumPar, i, indxForRmv, numClPar, numOpPar, totalPar)
