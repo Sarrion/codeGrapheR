@@ -29,23 +29,22 @@ roundFirst <- function(string){
              identifier = idAdder(name),
              cluster = clAdder(clZone)) ->> graph_data[nrow(graph_data) + 1, ]
   if(splitation$insideFun != ""){
-    l = l + 1
-    p = c(p, e)
-    e = 1
+    l <<- l + 1
+    p <<- c(p, e[length(e)])
+    e <<- c(e, 1)
     splitation$insideFun %>% 
       gsub(" ", "", .) %>% 
       strsplit(., split = ",") -> elements
     for(i in elements){
       deconstructor(i)
-      e = e + 1
+      e[length(e)] <<- e[length(e)] + 1
     }
-    p = p[-length(p)]
+    p <<- p[-length(p)]
+    e <<- e[-length(e)]
   }
   if(splitation$remaining != "")
     deconstructor(splitation$remaining)
-
-  
-    
+  l <<- l - 1
 }
 
 

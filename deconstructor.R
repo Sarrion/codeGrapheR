@@ -8,7 +8,6 @@ deconstructor <- function(string){
                pointer = p[length(p)], 
                identifier = id,
                cluster = cl) ->> graph_data[nrow(graph_data) + 1, ]
-    l <<- l - 1
     return(0)
   }
   if(  grepl("\\(", string) && !grepl("\\[", string) ){
