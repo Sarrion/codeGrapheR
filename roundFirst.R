@@ -14,10 +14,9 @@ stringSplitter <- function(string){
     if(trigger == 0)
       break
   }
-  result = list(fun = fun,
-                insideFun = substr(string, 1, i - 1),
-                remaining = substr(string, i + 1, nchar(string)))
-  return(result)
+  return(list(fun = fun,
+              insideFun = substr(string, 1, i - 1),
+              remaining = substr(string, i + 1, nchar(string)))  )
 }
 
 roundFirst <- function(string){
