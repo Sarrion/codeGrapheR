@@ -1,27 +1,37 @@
 
-roundSplitter <- function(string){
+squareSplitter <- function(string){
   for(i in 1:nchar(string))
-    if(substr(string, i, i) == "(")
+    if(substr(string, i, i) == "[")
       break
-  fun = paste0(substr(string, 1, i), ")")
+  leftStr = substr(string, 1, i - 1)
   string = substr(string, i + 1, nchar(string))
   trigger = 1
   for(i in 1:nchar(string)){
-    if(substr(string, i, i) == "(") 
+    if(substr(string, i, i) == "[") 
       trigger = trigger + 1
-    else if(substr(string, i, i) == ")")
+    else if(substr(string, i, i) == "]")
       trigger = trigger - 1
     if(trigger == 0)
       break
   }
-  return(list(fun = fun,
-              insideFun = substr(string, 1, i - 1),
+  return(list(leftStr = leftStr,
+              inside = substr(string, 1, i - 1),
               remaining = substr(string, i + 1, nchar(string)))  )
 }
 
-roundFirst <- function(string){
-  splitation = roundSplitter(string = string)
-  data.frame(name = splitation$`fun`,
+
+squareFirst <- function(string){
+  splitation = squareSplitter(string = string)
+  data.frame(name = splitation$`leftStr`,
+             layer = l,
+             element = e,
+             pointer = p[length(p)], 
+             identifier = idAdder(name),
+             cluster = clAdder(clZone)) ->> graph_data[nrow(graph_data) + 1, ]
+  l <<- l + 1
+  p <<- c(p, e[length(e)])
+  e <<- c(e, 1)
+  data.frame(name = "[]",
              layer = l,
              element = e,
              pointer = p[length(p)], 
@@ -31,7 +41,7 @@ roundFirst <- function(string){
     l <<- l + 1
     p <<- c(p, e[length(e)])
     e <<- c(e, 1)
-    splitation$insideFun %>% 
+    splitation$inside %>% 
       gsub(" ", "", .) %>% 
       strsplit(., split = ",") -> elements
     for(i in elements){
@@ -41,10 +51,12 @@ roundFirst <- function(string){
     p <<- p[-length(p)]
     e <<- e[-length(e)]
   }
+  p <<- p[-length(p)]
+  e <<- e[-length(e)]
+  l <<- l - 1
   if(splitation$remaining != "")
     deconstructor(splitation$remaining)
   l <<- l - 1
 }
-
 
 
