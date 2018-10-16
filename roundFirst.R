@@ -25,7 +25,7 @@ roundFirst <- function(string){
              layer = l,
              element = e,
              pointer = p[length(p)], 
-             identifier = idAdder(name),
+             identifier = idAdder(splitation$`fun`),
              cluster = clAdder(clZone)) ->> graph_data[nrow(graph_data) + 1, ]
   if(splitation$insideFun != ""){
     l <<- l + 1
